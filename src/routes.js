@@ -8,14 +8,15 @@ import {
 
 import App from './App';
 import Train from './components/Train';
+import Predict from './components/Predict';
 
 const createRoutes = () => (
   <Router>
     <App>
       <Switch>
         <Redirect exact from="/" to="/train" />
-        <Route exact path="/train" component={Train} />
-        {/* <Route exact path="/search" component={Search} /> */}
+        <Route path="/train" component={Train} />
+        <Route path="/predict" component={Predict} />
       </Switch>
     </App>
   </Router>

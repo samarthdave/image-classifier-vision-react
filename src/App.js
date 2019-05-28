@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
+
 import Header from './components/Header';
+import Camera from './components/Camera';
 
 import './App.css';
 
 class App extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       mode: 'train'
     };
@@ -15,15 +18,30 @@ class App extends Component {
     document.title = 'ML for Everyone';
   }
 
+  onChangeSelect = (e) => {
+    const { value:selected } = e.target;
+    
+    this.setState({
+      mode: selected
+    }, () => {
+      this.props.history.push(`/${selected}`);
+    });
+  }
+
   render() {
-    // const Children = this.props.children;
+    const headerProps = {
+      mode: this.state.mode,
+      onChangeSelect: this.onChangeSelect
+    };
+    
     return (
-      <div className="App">
-        <Header />
+      <div className="app">
+        <Header {...headerProps} />
+        <Camera />
         {this.props.children}
       </div>
     );
   }
 }
 
-export default App;
+export default withRouter(App);
