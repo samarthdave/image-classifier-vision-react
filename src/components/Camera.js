@@ -5,11 +5,14 @@ class Camera extends Component {
     super(props);
     this.cameraRef = React.createRef();
     this.state = {
-      currentStream: null
+      currentStream: null,
+      isFrontCam: false,
+      showFlipCamera: false
     };
   }
 
   configureVideo = () => {
+    const { isFrontCam } = this.state;
     navigator.mediaDevices.enumerateDevices()
       .then((devices) => {
         let params;
@@ -22,17 +25,25 @@ class Camera extends Component {
             video: true,
             audio: false
           };
-          // $("#flip-camera-button").hide();
-        } else {
-          let isFrontCam = false;
+          // hide flip camera
+          this.setState({
+            showFlipCamera: false
+          });
+        } else if(devices.length > 1) {
           params = {
             video: {
               facingMode: (isFrontCam ? "user" : "environment")
             },
             audio: false
           };
-          // $("#flip-camera-button").show();
+          // show camera flip option
+          this.setState({
+            showFlipCamera: true
+          });
         }
+
+        // NOTE: toggle prev state could be put her (not prev state)
+        // setState((prevState) => ... !prevState.showFlipCamera)
 
         navigator.mediaDevices.getUserMedia(params)
           .then((stream) => {
@@ -43,18 +54,43 @@ class Camera extends Component {
             this.cameraRef.current.srcObject = stream;
           })
           .catch((error) => {
+            // permission denied
             console.log(error);
-            // $.notify(error, "error");
           });
       });
   }
 
-  componentDidMount() {
+  stopCamera = (stream) => {
+    stream.getTracks().forEach((track) => {
+      track.stop();
+    });
+  }
+
+  flipCamera = () => {
+    const { currentStream } = this.state;
+    if(currentStream) {
+      this.stopCamera(currentStream);
+
+      this.setState((prevState) => ({
+        isFrontCam: !prevState.isFrontCam
+      }), this.configureVideo);
+    }
+  }
+
+  componentWillMount() {
     this.configureVideo();
   }
   render() {
+    const { showFlipCamera } = this.state;
     return (
-      <video autoPlay playsInline ref={this.cameraRef}></video>
+      <>
+        {
+          showFlipCamera ?
+          <button className="flip-camera-btn" onClick={this.flipCamera}>Flip camera</button>
+          : ''
+        }
+        <video autoPlay playsInline ref={this.cameraRef}></video>
+      </>
     );
   }
 }
