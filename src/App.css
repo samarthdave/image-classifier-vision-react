@@ -10,11 +10,18 @@ h1 {
   font-family: 'Open Sans', 'Roboto', sans-serif;
 }
 
+/* small text inside header "made w react" */
+h1 > .subtitle {
+  font-size: 0.6em;
+}
+
 h4 {
   margin: 0.2em 0;
 }
 
-.header {
+.header,
+.train,
+.predict {
   text-align: center;
 }
 
@@ -23,4 +30,11 @@ video {
   max-width: 600px;
   margin: 0 auto;
   display: block;
+}
+
+/* center form elements */
+.query-settings {
+  width: 70%;
+  max-width: 800px;
+  margin: 0 auto;
 }

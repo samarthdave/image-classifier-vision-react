@@ -3,7 +3,7 @@ import React from 'react';
 const Predict = () => {
   return (
     <div className="predict">
-      Prediction Component
+      <h2>Prediction Component</h2>
     </div>
   );
 };

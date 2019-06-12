@@ -3,7 +3,7 @@ import React from 'react';
 const Train = () => {
   return (
     <div className="train">
-      Training Component
+      <h2>Training Component</h2>
     </div>
   );
 };
